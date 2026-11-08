@@ -1,9 +1,9 @@
 window.GAMES = {
   gato:       { name: 'EL GATO ENCERRADO', icon: '◈', desc: 'Encierra al gato antes de que escape.', levels: 5 },
-  solitario:  { name: 'SOLITARIO',         icon: '♠', desc: 'Klondike clasico contra el reloj.',    levels: 5 },
+  solitario:  { name: 'SOLITARIO',         icon: '♠', desc: 'Klondike clásico contra el reloj.',    levels: 5 },
   memoria:    { name: 'MEMORIA',           icon: '◉', desc: 'Encuentra todas las parejas.',         levels: 5 },
-  observador: { name: 'OBSERVADOR',        icon: '◎', desc: 'Detecta diferencias entre escenas.',   levels: 5 },
-  codigo:     { name: 'CODIGO MUERTO',     icon: '⌘', desc: 'Resuelve patrones y secuencias.',      levels: 5 },
+  observador: { name: 'OBSERVADOR',        icon: '◎', desc: 'Detecta anomalías en la escena.',      levels: 5 },
+  codigo:     { name: 'CÓDIGO MUERTO',     icon: '⌘', desc: 'Resuelve patrones y secuencias.',      levels: 5 },
   laberinto:  { name: 'LABERINTO',         icon: '⊞', desc: 'Encuentra la salida en la oscuridad.', levels: 5 }
 };
 window.Levels = {
@@ -23,9 +23,25 @@ window.Levels = {
     if (opts.time > 0 && (!p.bestTime[lvl] || opts.time < p.bestTime[lvl])) p.bestTime[lvl] = opts.time;
     p.wins += 1; this.save(id, p); return p;
   },
+  // Halt ahora es MUY raro: 5% solo en nivel 3+. Preserva la mecánica pero
+  // hace que la mayoría de las partidas nunca lo vean.
+  tryComplete: function(id, lvl, opts) {
+    if (lvl >= 3 && Math.random() < 0.05) {
+      if (typeof Horror !== 'undefined' && Horror.systemHalt) {
+        Horror.systemHalt();
+        return true;
+      }
+    }
+    this.complete(id, lvl, opts);
+    return false;
+  },
   globalPercent: function() {
     var done = 0, total = 0;
     for (var id in GAMES) { total += GAMES[id].levels; done += this.get(id).completed.length; }
     return total ? Math.round(done / total * 100) : 0;
+  },
+  isRecord: function(id, lvl, score) {
+    var p = this.get(id);
+    return score > (p.bestScore[lvl] || 0);
   }
 };

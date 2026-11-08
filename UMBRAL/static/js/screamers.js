@@ -1,37 +1,91 @@
-window.Screamer = {
-  list: [
-    { image: 'static/img/screamers/screamer-01.png', sound: 'static/audio/screamers/scream-01.mp3', duration: 700 },
-    { image: 'static/img/screamers/screamer-02.png', sound: 'static/audio/screamers/scream-02.mp3', duration: 800 },
-    { image: 'static/img/screamers/screamer-03.png', sound: 'static/audio/screamers/scream-03.mp3', duration: 650 }
-  ],
-  s: { enabled: true, frequency: .4, duration: 700, minIntervalMs: 45000 },
-  layer: null, last: 0, timer: null,
-  init: function() {
-    var saved = Storage_.get('screamers', null);
-    if (saved) for (var k in saved) this.s[k] = saved[k];
-    this.layer = document.getElementById('screamer-layer');
-  },
-  set: function(k, v) { if (k in this.s) { this.s[k] = v; Storage_.set('screamers', this.s); } },
-  trigger: function(force) {
-    if (!this.s.enabled && !force) return;
-    if (!this.layer) return;
-    var now = Date.now();
-    if (!force && now - this.last < this.s.minIntervalMs) return;
-    if (!force && Math.random() > this.s.frequency) return;
-    this.last = now;
-    var s = this.list[Math.floor(Math.random() * this.list.length)];
-    var img = document.createElement('img'); img.src = s.image; img.alt = '';
-    img.addEventListener('error', function(){});
-    try { var a = new Audio(s.sound); a.volume = .85; a.addEventListener('error', function(){}); a.play().catch(function(){}); } catch (e) {}
-    this.layer.innerHTML = ''; this.layer.appendChild(img); this.layer.classList.add('active');
-    var self = this, dur = this.s.duration || s.duration || 700;
-    if (this.timer) clearTimeout(this.timer);
-    this.timer = setTimeout(function() { self.layer.classList.remove('active'); self.layer.innerHTML = ''; }, dur);
-  },
-  maybeTrigger: function(mult) {
-    if (!this.s.enabled) return;
-    var p = this.s.frequency * (mult || 1) * .12;
-    if (Math.random() < p) this.trigger(false);
+(function(){
+  var SCREAMERS = [
+    { id:'s1', image:'static/img/screamers/screamer-01.png', sound:'static/audio/sounds/screamers/scream-01.mp3', duration:900 },
+    { id:'s2', image:'static/img/screamers/screamer-02.png', sound:null, duration:2500 },
+    { id:'s3', image:'static/img/screamers/screamer-03.png', sound:null, duration:500 }
+  ];
+
+  var S = {
+    enabled: false,
+    frequency: 0.1,
+    minGlobalInterval: 600000,
+    layer: null,
+    lastGlobal: 0,
+    activeTimer: null,
+    busy: false
+  };
+
+  function pickScreamer() {
+    return SCREAMERS[Math.floor(Math.random() * SCREAMERS.length)];
   }
-};
-window.initScreamers = function() { Screamer.init(); };
+
+  function showLayer(s) {
+    if (!S.layer) return;
+    S.layer.innerHTML = '';
+    S.layer.className = 'screamer-layer';
+    var img = document.createElement('img');
+    img.src = s.image;
+    img.alt = '';
+    img.addEventListener('error', function(){});
+    S.layer.appendChild(img);
+    S.layer.classList.add('active', 'fade-in');
+  }
+
+  function hideLayer() {
+    if (!S.layer) return;
+    S.layer.classList.add('fade-out');
+    setTimeout(function() {
+      S.layer.classList.remove('active', 'fade-in', 'fade-out');
+      S.layer.innerHTML = '';
+    }, 520);
+  }
+
+  function playSound(s) {
+    if (!s.sound) return;
+    try {
+      var a = new Audio(s.sound);
+      a.volume = 0.7;
+      a.addEventListener('error', function(){});
+      a.play().catch(function(){});
+    } catch (e) {}
+  }
+
+  function execute(s) {
+    if (S.busy) return;
+    S.busy = true;
+    S.lastGlobal = Date.now();
+    showLayer(s);
+    playSound(s);
+    var dur = s.duration || 800;
+    S.activeTimer = setTimeout(function() {
+      hideLayer();
+      setTimeout(function() { S.busy = false; }, 520);
+    }, dur);
+  }
+
+  window.Screamer = {
+    init: function() {
+      var saved = Storage_.get('screamers', null);
+      if (saved) {
+        if (typeof saved.enabled === 'boolean') S.enabled = saved.enabled;
+      }
+      S.layer = document.getElementById('screamer-layer');
+    },
+    set: function(k, v) {
+      if (k in S) {
+        S[k] = v;
+        Storage_.set('screamers', { enabled: S.enabled });
+      }
+    },
+    trigger: function(force) {
+      if (!S.enabled && !force) return;
+      if (!S.layer) return;
+      if (!force && Date.now() - S.lastGlobal < S.minGlobalInterval) return;
+      execute(pickScreamer());
+    },
+    maybeTrigger: function() {},
+    showBg: function() {},
+    restoreBg: function() {}
+  };
+  window.initScreamers = function() { Screamer.init(); };
+})();

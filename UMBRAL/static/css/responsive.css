@@ -1,2 +1,86 @@
-@media (max-width:900px){.game-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.menu-title h1{font-size:26px}.screen-content{padding:16px 14px}.monitor-screen,.screen-content{min-height:480px}}
-@media (max-width:600px){body{padding:8px}.monitor-frame{padding:10px}.monitor-bezel{padding:6px}.game-grid{grid-template-columns:1fr;gap:10px}.menu-header{flex-direction:column;align-items:flex-start}.menu-title h1{font-size:22px}.menu-footer .btn{width:100%}}
+@media (max-width:900px){
+  .desktop-icons{grid-template-columns:repeat(auto-fill,88px);grid-auto-rows:100px;padding:10px}
+  .desktop-icon-img{width:40px;height:40px;font-size:22px}
+  .desktop-icon-label{font-size:9px}
+  .desktop-icon-sub{font-size:7px}
+  .tray-progress-bar{width:60px}
+}
+@media (max-width:600px){
+  body{padding:0;align-items:stretch;background:#000}
+  .monitor-frame{
+    width:100vw;height:100vh;height:100dvh;
+    max-height:none;min-height:none;border-radius:0;padding:0;border:none;
+    background:linear-gradient(180deg,#1a1a1a 0%,#0a0a0a 100%);
+    box-shadow:none;display:flex;flex-direction:column;
+  }
+  .monitor-bezel{
+    flex:1;min-height:0;padding:8px 6px 6px;border-radius:0;
+    background:#050505;display:flex;flex-direction:column;
+  }
+  .monitor-screen{flex:1;min-height:0;border-radius:8px;border:4px solid #1a1a1a}
+  .monitor-panel{display:none}
+  .taskbar{display:none!important}
+  .mobile-softkeys{
+    display:flex;flex-shrink:0;
+    background:linear-gradient(180deg,#2a2a2a 0%,#1a1a1a 100%);
+    border-top:2px solid #444;padding:6px;height:60px;align-items:center;gap:6px;
+    box-shadow:inset 0 2px 0 rgba(255,255,255,.08);
+  }
+  .softkey{
+    flex:1;height:44px;
+    background:linear-gradient(180deg,#3a3a3a 0%,#1a1a1a 100%);
+    color:var(--accent-bright);
+    border:2px solid;border-top-color:#5a5a5a;border-left-color:#5a5a5a;
+    border-right-color:#000;border-bottom-color:#000;
+    font-family:var(--font-mono);font-size:13px;font-weight:bold;
+    letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;padding:0;
+  }
+  .softkey:active{
+    border-top-color:#000;border-left-color:#000;
+    border-right-color:#5a5a5a;border-bottom-color:#5a5a5a;
+    background:linear-gradient(180deg,#1a1a1a 0%,#0a0a0a 100%);
+  }
+  .softkey-center{
+    flex:0 0 auto;padding:0 8px;
+    color:var(--accent-bright);font-size:10px;font-weight:bold;
+    letter-spacing:0.25em;opacity:0.6;text-align:center;min-width:60px;
+  }
+  .desktop-icons{
+    grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;
+    padding:10px 8px;gap:10px 6px;align-content:start;
+  }
+  .desktop-icon{padding:6px 2px;gap:4px;border:1px solid transparent}
+  .desktop-icon-img{width:44px;height:44px;font-size:24px}
+  .desktop-icon-label{font-size:9px;line-height:1.15}
+  .desktop-icon-sub{font-size:7px}
+  .desktop-brand{top:8px;right:10px;opacity:.08}
+  .brand-line{font-size:14px}
+  .brand-line.small{font-size:8px}
+  .brand-line.smaller{display:none}
+  .window{inset:4px}
+  .window-title{height:20px;font-size:10px;padding:0 2px 0 4px}
+  .window-btn{width:14px;height:14px;font-size:8px}
+  .window-body{padding:8px}
+  .window-status{height:16px;font-size:9px}
+  .boot-overlay{padding:16px}
+  .boot-log{font-size:11px;line-height:1.4}
+  .boot-hint{font-size:9px;margin-top:16px}
+  .btn{font-size:10px;padding:4px 10px}
+  .level-btn{min-width:36px;height:36px;font-size:12px}
+  .game-status{font-size:10px;gap:10px;padding:4px 6px}
+  .settings-root{grid-template-columns:1fr;gap:8px}
+  .settings-group{padding:10px}
+  .result-header{font-size:16px;letter-spacing:0.15em;padding:10px 0}
+  .result-stat{padding:6px 10px;min-width:70px}
+  .result-stat .val{font-size:14px}
+  .toast-layer{bottom:70px;right:10px}
+  .toast{font-size:10px;padding:6px 10px}
+}
+@media (max-width:380px){
+  .desktop-icons{grid-template-columns:repeat(2,1fr)}
+  .desktop-icon-img{width:48px;height:48px;font-size:26px}
+  .softkey{font-size:11px;height:40px}
+  .softkey-center{font-size:8px;min-width:40px}
+  .mobile-softkeys{height:54px}
+}

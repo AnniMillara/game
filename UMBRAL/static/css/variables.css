@@ -1,1 +1,52 @@
-:root{--green-bright:#39FF14;--green-term:#00FF66;--green-dark:#008F39;--green-dim:#174D24;--black-green:#020902;--gray-dark:#202820;--green-glow:0 0 4px #39FF14,0 0 10px rgba(57,255,20,.45);--green-glow-soft:0 0 3px rgba(57,255,20,.6);--font-mono:'Courier New',ui-monospace,monospace;--scanline-opacity:0.18;--crt-intensity:1;--brightness:1;--transition:140ms ease}
+:root {
+  /* Carcasa (computadora beige) */
+  --bg-case:        #c8c4bc;
+  --bg-case-light:  #e0ddd5;
+  --bg-case-dark:   #a8a49c;
+  --bg-case-shadow: #8a857c;
+  --bg-case-deep:   #54504a;
+
+  /* Desktop */
+  --bg-desktop:     #2a4a55;
+  --bg-desktop-alt: #345a66;
+
+  /* Terminal (paneles de juego) */
+  --term-bg:        #0f1412;
+  --term-bg-alt:    #17201c;
+  --term-fg:        #c8dcc8;
+  --term-muted:     #6b8070;
+  --term-border:    #2a3630;
+
+  /* Texto */
+  --text:           #2a2824;
+  --text-muted:     #6a665c;
+  --text-inverse:   #f0f0e8;
+  --text-inverse-muted: #a8a49c;
+
+  /* Acento (verde apagado, solo detalles) */
+  --accent:         #4fa86a;
+  --accent-bright:  #6DFF8B;
+  --accent-glow:    0 0 6px rgba(109,255,139,.5);
+
+  /* Estados */
+  --warning:        #b89a3c;
+  --danger:         #a85040;
+  --success:        #4fa86a;
+
+  /* Aliases (compatibilidad con CSS de juegos) */
+  --green-bright:     var(--accent-bright);
+  --green-term:       var(--term-fg);
+  --green-dark:       var(--term-border);
+  --green-dim:        var(--term-muted);
+  --black-green:      var(--term-bg);
+  --gray-dark:        var(--term-border);
+  --green-glow:       var(--accent-glow);
+  --green-glow-soft:  0 0 3px rgba(109,255,139,.3);
+
+  /* Fuente y efectos */
+  --font-mono: 'Courier New', ui-monospace, monospace;
+  --scanline-opacity: 0.05;
+  --crt-intensity: 0.3;
+  --brightness: 1;
+  --transition: 140ms ease;
+}

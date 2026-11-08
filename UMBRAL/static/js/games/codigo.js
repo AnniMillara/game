@@ -1,15 +1,34 @@
 (function() {
   var LEVELS = [
-    { puzzles: [{ p:'2, 4, 6, 8, ?', a:'10' }, { p:'1, 3, 5, 7, ?', a:'9' }, { p:'5, 10, 20, 40, ?', a:'80' }, { p:'100, 90, 80, ?', a:'70' }], time:90 },
-    { puzzles: [{ p:'1, 1, 2, 3, 5, 8, ?', a:'13' }, { p:'2, 3, 5, 7, 11, ?', a:'13' }, { p:'1, 4, 9, 16, ?', a:'25' }, { p:'3, 6, 12, 24, ?', a:'48' }], time:90 },
-    { puzzles: [{ p:'A B A B A B ?', a:'A' }, { p:'X X Y X X Y X X ?', a:'Y' }, { p:'1 2 1 2 1 2 ?', a:'1' }, { p:'Z Y Z Y Z ?', a:'Y' }], time:75 },
-    { puzzles: [{ p:'Suma=6, todos iguales. Codigo:', a:'222' }, { p:'Producto=24. Dos digitos: 2 y 3. Codigo 3 digitos:', a:'234' }, { p:'Capicua 4 digitos, suma=8, empieza 1:', a:'1001' }, { p:'Suma=7, ambos primos. Codigo 2 digitos:', a:'25' }], time:75 },
-    { puzzles: [{ p:'1, 2, 4, 7, 11, ?', a:'16' }, { p:'100, 50, 25, ?', a:'12.5' }, { p:'A A B A A B A ?', a:'A' }, { p:'Suma=6, producto=8, dos iguales. Codigo 3 digitos:', a:'114' }], time:60 }
+    { puzzles: [
+      { p:'2, 4, 6, 8, ?', a:'10' }, { p:'1, 3, 5, 7, ?', a:'9' },
+      { p:'5, 10, 20, 40, ?', a:'80' }, { p:'100, 90, 80, ?', a:'70' }
+    ], time:90 },
+    { puzzles: [
+      { p:'1, 1, 2, 3, 5, 8, ?', a:'13' }, { p:'2, 3, 5, 7, 11, ?', a:'13' },
+      { p:'1, 4, 9, 16, ?', a:'25' }, { p:'3, 6, 12, 24, ?', a:'48' }
+    ], time:90 },
+    { puzzles: [
+      { p:'A B A B A B ?', a:'A' }, { p:'X X Y X X Y X X ?', a:'Y' },
+      { p:'1 2 1 2 1 2 ?', a:'1' }, { p:'Z Y Z Y Z ?', a:'Y' }
+    ], time:75 },
+    { puzzles: [
+      { p:'Suma=6, todos iguales. Código:', a:'222' },
+      { p:'Producto=24. Dos dígitos: 2 y 3. Código 3 dígitos:', a:'234' },
+      { p:'Capicúa 4 dígitos, suma=8, empieza 1:', a:'1001' },
+      { p:'Suma=7, ambos primos. Código 2 dígitos:', a:'25' }
+    ], time:75 },
+    { puzzles: [
+      { p:'1, 2, 4, 7, 11, ?', a:'16' }, { p:'100, 50, 25, ?', a:'12.5' },
+      { p:'A A B A A B A ?', a:'A' },
+      { p:'Suma=6, producto=8, dos iguales. Código 3 dígitos:', a:'114' }
+    ], time:60 }
   ];
   var root = null, state = null, tick = null;
+
   function start(lvl) {
     var c = LEVELS[lvl-1];
-    state = { level: lvl, puzzles: c.puzzles.slice(), idx: 0, attempts: 2, timeLeft: c.time, finished: false };
+    state = { level: lvl, puzzles: c.puzzles.slice(), idx: 0, attempts: 2, timeLeft: c.time, correct: 0, finished: false };
     Levels.recordAttempt('codigo'); draw();
     if (tick) clearInterval(tick);
     tick = setInterval(function() {
@@ -35,7 +54,10 @@
     var puzzle = state.puzzles[state.idx];
     wrap.appendChild(IU.el('div', { class: 'cod-prompt' }, puzzle.p));
     var input = IU.el('input', { class: 'cod-input', type: 'text', autocomplete: 'off' });
-    input.addEventListener('keydown', function(e) { if (e.key === 'Enter') submit(input.value); else playSfx('codigo', 'key'); });
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') submit(input.value);
+      else playSfx('codigo', 'key');
+    });
     var row = IU.el('div', { class: 'cod-input-row' }); row.appendChild(input); wrap.appendChild(row);
     wrap.appendChild(IU.el('div', { style: { display: 'flex', gap: '10px', justifyContent: 'center' } },
       IU.el('button', { class: 'btn', onclick: function() { submit(input.value); } }, '[ ENVIAR ]')));
@@ -53,7 +75,8 @@
     if (!v) return;
     var p = state.puzzles[state.idx], m = document.getElementById('c-msg');
     if (v === p.a.toUpperCase()) {
-      playSfx('codigo', 'correct'); state.idx++; state.attempts = 2;
+      playSfx('codigo', 'correct');
+      state.idx++; state.attempts = 2; state.correct++;
       if (state.idx >= state.puzzles.length) { finish(true, 'SECUENCIA COMPLETADA'); return; }
       if (m) m.textContent = 'VERIFICADO';
       draw();
@@ -67,8 +90,38 @@
   function finish(won, msg) {
     if (!state || state.finished) return;
     state.finished = true; stop();
-    var m = document.getElementById('c-msg'); if (m) m.textContent = msg;
-    if (won) { playSfx('codigo', 'level'); Levels.complete('codigo', state.level, { score: Math.max(10, 400 - (LEVELS[state.level-1].time - state.timeLeft)) }); }
+
+    var lvl = state.level, isLast = lvl >= LEVELS.length;
+    var nextLevel = (won && !isLast) ? lvl + 1 : null;
+    var elapsed = LEVELS[lvl-1].time - state.timeLeft;
+    var score = won ? Math.max(10, 400 - elapsed * 2) : 0;
+    var isRecord = won && Levels.isRecord('codigo', lvl, score);
+    var unlockedNew = false;
+
+    if (won) {
+      playSfx('codigo', 'level');
+      if (Levels.tryComplete && Levels.tryComplete('codigo', lvl, { score: score, time: elapsed })) return;
+      unlockedNew = nextLevel !== null;
+    }
+
+    var stats = [
+      { label: 'NIVEL', value: String(lvl) },
+      { label: 'TIEMPO', value: elapsed + 's' },
+      { label: 'ACIERTOS', value: state.correct + '/' + state.puzzles.length }
+    ];
+    if (won) stats.push({ label: 'PUNTOS', value: String(score) });
+
+    IU.showResult({
+      won: won, message: msg, level: lvl,
+      unlocked: unlockedNew, newRecord: isRecord,
+      stats: stats,
+      onNext: nextLevel ? function() { start(nextLevel); } : null,
+      onRetry: function() { start(lvl); },
+      onLevels: function() { IU.levelSelect(root, 'codigo', start); }
+    });
   }
-  window.CodigoGame = { render: function(r) { root = r; IU.levelSelect(r, 'codigo', start); }, destroy: function() { stop(); state = null; root = null; } };
+  window.CodigoGame = {
+    render: function(r) { root = r; IU.levelSelect(r, 'codigo', start); },
+    destroy: function() { stop(); state = null; root = null; }
+  };
 })();

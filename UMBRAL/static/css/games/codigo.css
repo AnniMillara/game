@@ -1,5 +1,96 @@
+/* ============================================================
+   CÓDIGO MUERTO — Tema mostaza
+   ============================================================ */
+[data-game="codigo"] {
+  --green-bright: #e8cc88;
+  --green-term:   #f0e0c0;
+  --green-dark:   #6a5a2a;
+  --green-dim:    #8a7a4a;
+  --black-green:  #1a140a;
+
+  --term-bg:      #1a140a;
+  --term-bg-alt:  #241a0a;
+  --term-fg:      #f0e0c0;
+  --term-muted:   #8a7a4a;
+  --term-border:  #6a5a2a;
+
+  --accent:        #aa8a4a;
+  --accent-bright: #e8cc88;
+
+  --game-accent:        #aa8a4a;
+  --game-accent-bright: #e8cc88;
+}
+
+[data-game="codigo"] .game-status {
+  background: #241a0a;
+  border-color: #6a5a2a;
+  color: #8a7a4a;
+}
+[data-game="codigo"] .game-status .val { color: #e8cc88; }
+
+[data-game="codigo"] .level-select {
+  background: #241a0a;
+  border-color: #6a5a2a;
+}
+[data-game="codigo"] .level-btn {
+  background: #241a0a;
+  color: #f0e0c0;
+  border-color: #6a5a2a;
+}
+[data-game="codigo"] .level-btn:hover:not(:disabled) {
+  background: #6a5a2a;
+  color: #e8cc88;
+}
+[data-game="codigo"] .level-btn.completed {
+  background: #aa8a4a;
+  color: #000;
+}
+
+[data-game="codigo"] .btn {
+  background: #241a0a;
+  color: #f0e0c0;
+  border-top-color: #6a5a2a;
+  border-left-color: #6a5a2a;
+  border-right-color: #0a0806;
+  border-bottom-color: #0a0806;
+}
+[data-game="codigo"] .btn:hover:not(:disabled) {
+  background: #3a2a0a;
+  color: #e8cc88;
+}
+
+[data-game="codigo"] .cod-prompt {
+  border-color: #aa8a4a;
+  color: #e8cc88;
+  background: #1a140a;
+}
+[data-game="codigo"] .cod-input {
+  border-color: #6a5a2a;
+  color: #f0e0c0;
+  background: #1a140a;
+}
+[data-game="codigo"] .cod-input:focus {
+  border-color: #e8cc88;
+  box-shadow: 0 0 8px rgba(170,138,74,.4);
+}
+
+/* ============================================================
+   ESTILOS BASE DEL JUEGO
+   ============================================================ */
 .cod-root{max-width:620px;margin:0 auto}
-.cod-prompt{font-size:20px;letter-spacing:.15em;color:var(--green-bright);text-align:center;padding:20px;border:1px dashed var(--green-dark);border-radius:6px;margin-bottom:14px;min-height:90px;display:flex;align-items:center;justify-content:center;word-break:break-word}
+.cod-prompt{
+  font-size:20px;letter-spacing:.15em;
+  color:var(--green-bright);text-align:center;
+  padding:20px;border:1px dashed var(--green-dark);
+  border-radius:6px;margin-bottom:14px;min-height:90px;
+  display:flex;align-items:center;justify-content:center;
+  word-break:break-word;
+}
 .cod-input-row{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
-.cod-input{background:transparent;border:1px solid var(--green-dark);color:var(--green-bright);padding:8px 12px;font-size:18px;letter-spacing:.2em;border-radius:4px;text-align:center;width:200px;font-family:inherit}
+.cod-input{
+  background:transparent;border:1px solid var(--green-dark);
+  color:var(--green-bright);padding:8px 12px;font-size:18px;
+  letter-spacing:.2em;border-radius:4px;text-align:center;
+  width:200px;font-family:inherit;
+}
 .cod-input:focus{outline:none;border-color:var(--green-bright)}

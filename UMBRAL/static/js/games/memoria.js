@@ -2,7 +2,12 @@
   var LEVELS = [{ pairs:4, time:90 }, { pairs:6, time:90 }, { pairs:8, time:80 }, { pairs:12, time:75 }, { pairs:18, time:70 }];
   var SYM = ['◉','✦','✚','◆','▲','■','●','✧','★','☾','☀','⚑','⚔','⚖','⚙','⚡','⚓','⚗'];
   var root = null, state = null, tick = null;
-  function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+
+  function shuffle(a) {
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+
   function start(lvl) {
     var c = LEVELS[lvl-1];
     var picked = shuffle(SYM.slice()).slice(0, c.pairs), deck = [];
@@ -35,7 +40,10 @@
     var g = IU.el('div', { class: 'mem-grid' }); g.style.gridTemplateColumns = 'repeat(' + cols + ',1fr)';
     state.cards.forEach(function(c, i) {
       var flip = state.flipped.indexOf(i) !== -1 || c._m;
-      var node = IU.el('div', { class: 'mem-card' + (flip ? ' flipped' : '') + (c._m ? ' matched' : ''), onclick: function() { flipCard(i); } },
+      var node = IU.el('div', {
+        class: 'mem-card' + (flip ? ' flipped' : '') + (c._m ? ' matched' : ''),
+        onclick: function() { flipCard(i); }
+      },
         IU.el('div', { class: 'mem-inner' },
           IU.el('div', { class: 'mem-face mem-front' }),
           IU.el('div', { class: 'mem-face mem-back' }, c.s)
@@ -43,7 +51,6 @@
       g.appendChild(node);
     });
     wrap.appendChild(g);
-    wrap.appendChild(IU.el('div', { class: 'game-message', id: 'm-msg' }, ' '));
     var a = IU.el('div', { style: { display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '10px' } });
     a.appendChild(IU.el('button', { class: 'btn', onclick: function() { start(state.level); } }, '[ REINICIAR ]'));
     a.appendChild(IU.el('button', { class: 'btn', onclick: function() { stop(); IU.levelSelect(root, 'memoria', start); } }, '[ NIVELES ]'));
@@ -73,8 +80,39 @@
   function finish(won, msg) {
     if (!state || state.finished) return;
     state.finished = true; stop();
-    var m = document.getElementById('m-msg'); if (m) m.textContent = msg;
-    if (won) { playSfx('memoria', 'level'); Levels.complete('memoria', state.level, { score: Math.max(10, 200 - state.moves * 3) }); }
+
+    var lvl = state.level, isLast = lvl >= LEVELS.length;
+    var nextLevel = (won && !isLast) ? lvl + 1 : null;
+    var elapsed = LEVELS[lvl-1].time - state.timeLeft;
+    var score = won ? Math.max(10, 200 - state.moves * 3) : 0;
+    var isRecord = won && Levels.isRecord('memoria', lvl, score);
+    var unlockedNew = false;
+
+    if (won) {
+      playSfx('memoria', 'level');
+      if (Levels.tryComplete && Levels.tryComplete('memoria', lvl, { score: score, time: elapsed })) return;
+      unlockedNew = nextLevel !== null;
+    }
+
+    var stats = [
+      { label: 'NIVEL', value: String(lvl) },
+      { label: 'TIEMPO', value: elapsed + 's' },
+      { label: 'MOVS', value: String(state.moves) },
+      { label: 'PAREJAS', value: state.matched + '/' + state.total }
+    ];
+    if (won) stats.push({ label: 'PUNTOS', value: String(score) });
+
+    IU.showResult({
+      won: won, message: msg, level: lvl,
+      unlocked: unlockedNew, newRecord: isRecord,
+      stats: stats,
+      onNext: nextLevel ? function() { start(nextLevel); } : null,
+      onRetry: function() { start(lvl); },
+      onLevels: function() { IU.levelSelect(root, 'memoria', start); }
+    });
   }
-  window.MemoriaGame = { render: function(r) { root = r; IU.levelSelect(r, 'memoria', start); }, destroy: function() { stop(); state = null; root = null; } };
+  window.MemoriaGame = {
+    render: function(r) { root = r; IU.levelSelect(r, 'memoria', start); },
+    destroy: function() { stop(); state = null; root = null; }
+  };
 })();

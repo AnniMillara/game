@@ -1,3 +1,80 @@
+/* ============================================================
+   MEMORIA — Tema violeta
+   ============================================================ */
+[data-game="memoria"] {
+  --green-bright: #b8a8e8;
+  --green-term:   #d8d0f0;
+  --green-dark:   #4a3a7a;
+  --green-dim:    #7a6aaa;
+  --black-green:  #100820;
+
+  --term-bg:      #100820;
+  --term-bg-alt:  #1a1030;
+  --term-fg:      #d8d0f0;
+  --term-muted:   #8a7ab8;
+  --term-border:  #4a3a7a;
+
+  --accent:        #7a6aaa;
+  --accent-bright: #b8a8e8;
+
+  --game-accent:        #7a6aaa;
+  --game-accent-bright: #b8a8e8;
+}
+
+[data-game="memoria"] .game-status {
+  background: #1a1030;
+  border-color: #4a3a7a;
+  color: #8a7ab8;
+}
+[data-game="memoria"] .game-status .val { color: #b8a8e8; }
+
+[data-game="memoria"] .level-select {
+  background: #1a1030;
+  border-color: #4a3a7a;
+}
+[data-game="memoria"] .level-btn {
+  background: #1a1030;
+  color: #d8d0f0;
+  border-color: #4a3a7a;
+}
+[data-game="memoria"] .level-btn:hover:not(:disabled) {
+  background: #4a3a7a;
+  color: #b8a8e8;
+}
+[data-game="memoria"] .level-btn.completed {
+  background: #7a6aaa;
+  color: #000;
+}
+
+[data-game="memoria"] .btn {
+  background: #1a1030;
+  color: #d8d0f0;
+  border-top-color: #4a3a7a;
+  border-left-color: #4a3a7a;
+  border-right-color: #080510;
+  border-bottom-color: #080510;
+}
+[data-game="memoria"] .btn:hover:not(:disabled) {
+  background: #2a1a4a;
+  color: #b8a8e8;
+}
+
+[data-game="memoria"] .mem-front {
+  background: linear-gradient(135deg, #1a1030, #0e0520);
+  color: #8a7ab8;
+}
+[data-game="memoria"] .mem-back {
+  background: rgba(122,106,170,.15);
+  color: #b8a8e8;
+}
+[data-game="memoria"] .mem-card.matched .mem-back {
+  border-color: #b8a8e8;
+  box-shadow: inset 0 0 12px rgba(122,106,170,.5);
+}
+
+/* ============================================================
+   ESTILOS BASE DEL JUEGO
+   ============================================================ */
 .mem-grid{display:grid;gap:8px;margin:16px auto;width:fit-content}
 .mem-card{width:62px;height:82px;perspective:800px;cursor:pointer}
 .mem-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform 320ms ease}

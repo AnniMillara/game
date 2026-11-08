@@ -1,15 +1,72 @@
-.scanlines{background-image:repeating-linear-gradient(to bottom,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,calc(var(--scanline-opacity) * var(--crt-intensity))) 3px,rgba(0,0,0,0) 4px);background-size:100% 4px;mix-blend-mode:multiply}
-.noise{background-image:radial-gradient(rgba(57,255,20,.06) 1px,transparent 1px),radial-gradient(rgba(57,255,20,.03) 1px,transparent 1px);background-size:3px 3px,7px 7px;opacity:.4;animation:noiseShift .6s steps(4) infinite}
-@keyframes noiseShift{0%{background-position:0 0,1px 2px}50%{background-position:2px 1px,0 2px}100%{background-position:0 0,1px 2px}}
-.monitor-screen.glitch{animation:glitchScreen 340ms steps(2) 1}
-@keyframes glitchScreen{0%{transform:translate(0,0);filter:none}20%{transform:translate(-3px,1px);filter:brightness(1.4)}40%{transform:translate(4px,-2px);filter:invert(.15)}60%{transform:translate(-2px,2px);filter:brightness(1.6)}80%{transform:translate(1px,-1px);filter:hue-rotate(-20deg)}100%{transform:translate(0,0);filter:none}}
-.monitor-screen.flicker{animation:flickerScreen 500ms steps(3)}
-@keyframes flickerScreen{0%{opacity:1}20%{opacity:.2}40%{opacity:1}60%{opacity:.35}100%{opacity:1}}
-.monitor-screen.turnoff{animation:turnOff 600ms forwards}
-@keyframes turnOff{0%{opacity:1;transform:scaleY(1)}60%{opacity:.4;transform:scaleY(.02)}100%{opacity:0;transform:scaleY(0)}}
-.monitor-screen.turnon{animation:turnOn 700ms ease-out}
-@keyframes turnOn{0%{opacity:0;transform:scaleY(0);filter:brightness(4)}40%{opacity:1;transform:scaleY(1);filter:brightness(2)}100%{filter:brightness(var(--brightness))}}
-.screamer-layer{position:fixed;inset:0;display:none;z-index:10000;background:#000;align-items:center;justify-content:center;pointer-events:none}
+/* Scanlines sutiles */
+.scanlines{
+  background-image:repeating-linear-gradient(to bottom,
+    rgba(0,0,0,0) 0px, rgba(0,0,0,0) 2px,
+    rgba(0,0,0,calc(var(--scanline-opacity) * var(--crt-intensity))) 2px,
+    rgba(0,0,0,calc(var(--scanline-opacity) * var(--crt-intensity))) 3px,
+    rgba(0,0,0,0) 3px, rgba(0,0,0,0) 4px);
+  background-size:100% 4px;
+  mix-blend-mode:multiply;
+  opacity:0.55;
+}
+.noise{
+  background-image:
+    radial-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
+    radial-gradient(rgba(255,255,255,.01) 1px,transparent 1px);
+  background-size:3px 3px,7px 7px;
+  background-position:0 0,1px 2px;
+  opacity:.06;
+  animation:noiseShift 1.6s steps(4) infinite;
+}
+@keyframes noiseShift{
+  0%{background-position:0 0,1px 2px}
+  50%{background-position:2px 1px,0 2px}
+  100%{background-position:0 0,1px 2px}
+}
+.monitor-screen::after{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:4;
+  border-radius:8px;
+  box-shadow:inset 0 0 60px rgba(0,0,0,.5);
+  background:radial-gradient(ellipse at center,transparent 65%,rgba(0,0,0,.2) 100%);
+}
+
+.monitor-screen.glitch{animation:glitchScreen .3s steps(3) 1}
+@keyframes glitchScreen{
+  0%{transform:translate(0,0)}
+  25%{transform:translate(-2px,1px)}
+  50%{transform:translate(2px,-1px)}
+  75%{transform:translate(-1px,0)}
+  100%{transform:translate(0,0)}
+}
+.monitor-screen.flicker{animation:flickerScreen .4s steps(3)}
+@keyframes flickerScreen{0%{opacity:1}30%{opacity:.6}60%{opacity:.9}100%{opacity:1}}
+.monitor-screen.turnoff{animation:turnOff .65s forwards}
+@keyframes turnOff{
+  0%{opacity:1;transform:scaleY(1)}
+  60%{opacity:.4;transform:scaleY(.02)}
+  100%{opacity:0;transform:scaleY(0)}
+}
+.monitor-screen.turnon{animation:turnOn .8s ease-out}
+@keyframes turnOn{
+  0%{opacity:0;transform:scaleY(0);filter:brightness(3)}
+  35%{opacity:.8;transform:scaleY(1);filter:brightness(1.8)}
+  70%{filter:brightness(1.15)}
+  100%{opacity:1;filter:brightness(var(--brightness))}
+}
+
+.screamer-layer{
+  position:fixed;inset:0;display:none;z-index:10000;background:#000;
+  align-items:center;justify-content:center;pointer-events:none;
+}
 .screamer-layer.active{display:flex}
-.screamer-layer img{width:100%;height:100%;object-fit:contain;animation:screamerPulse 120ms infinite alternate}
-@keyframes screamerPulse{from{transform:scale(1)}to{transform:scale(1.03);filter:contrast(1.4)}}
+.screamer-layer img{width:100%;height:100%;object-fit:contain}
+.screamer-layer.active.fade-in{animation:fadeIn .6s}
+.screamer-layer.active.fade-out{animation:fadeOut .5s forwards}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeOut{from{opacity:1}to{opacity:0}}
+
+@media (prefers-reduced-motion:reduce){
+  .noise,.screamer-layer img{animation:none!important}
+  .monitor-screen.glitch,.monitor-screen.flicker,
+  .monitor-screen.turnoff,.monitor-screen.turnon{animation:none!important}
+}

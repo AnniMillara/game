@@ -1,5 +1,98 @@
+/* ============================================================
+   LABERINTO — Tema teal
+   ============================================================ */
+[data-game="laberinto"] {
+  --green-bright: #8adede;
+  --green-term:   #c8e8e8;
+  --green-dark:   #2a5a5a;
+  --green-dim:    #4a8a8a;
+  --black-green:  #0a1a1a;
+
+  --term-bg:      #0a1a1a;
+  --term-bg-alt:  #142828;
+  --term-fg:      #c8e8e8;
+  --term-muted:   #5a8a8a;
+  --term-border:  #2a5a5a;
+
+  --accent:        #4a9a9a;
+  --accent-bright: #8adede;
+
+  --game-accent:        #4a9a9a;
+  --game-accent-bright: #8adede;
+}
+
+[data-game="laberinto"] .game-status {
+  background: #142828;
+  border-color: #2a5a5a;
+  color: #5a8a8a;
+}
+[data-game="laberinto"] .game-status .val { color: #8adede; }
+
+[data-game="laberinto"] .level-select {
+  background: #142828;
+  border-color: #2a5a5a;
+}
+[data-game="laberinto"] .level-btn {
+  background: #142828;
+  color: #c8e8e8;
+  border-color: #2a5a5a;
+}
+[data-game="laberinto"] .level-btn:hover:not(:disabled) {
+  background: #2a5a5a;
+  color: #8adede;
+}
+[data-game="laberinto"] .level-btn.completed {
+  background: #4a9a9a;
+  color: #000;
+}
+
+[data-game="laberinto"] .btn {
+  background: #142828;
+  color: #c8e8e8;
+  border-top-color: #2a5a5a;
+  border-left-color: #2a5a5a;
+  border-right-color: #051010;
+  border-bottom-color: #051010;
+}
+[data-game="laberinto"] .btn:hover:not(:disabled) {
+  background: #1f3a3a;
+  color: #8adede;
+}
+
+[data-game="laberinto"] .lab-grid {
+  background: #000;
+  border-color: #2a5a5a;
+}
+[data-game="laberinto"] .lab-cell {
+  background: #0a1a1a;
+}
+[data-game="laberinto"] .lab-cell.wall {
+  background: rgba(42,90,90,.5);
+}
+[data-game="laberinto"] .lab-cell.visible {
+  background: rgba(74,138,138,.4);
+}
+[data-game="laberinto"] .lab-cell.visible.wall {
+  background: rgba(42,90,90,.8);
+}
+[data-game="laberinto"] .lab-cell.player {
+  background: #8adede;
+  box-shadow: 0 0 10px #8adede;
+}
+[data-game="laberinto"] .lab-cell.exit {
+  background: #4a9a9a;
+  box-shadow: 0 0 12px #4a9a9a;
+}
+[data-game="laberinto"] .lab-help { color: #5a8a8a; }
+
+/* ============================================================
+   ESTILOS BASE DEL JUEGO
+   ============================================================ */
 .lab-root{display:flex;flex-direction:column;align-items:center;gap:10px}
-.lab-grid{display:grid;gap:1px;background:#050a05;padding:8px;border:1px solid var(--green-dark);border-radius:6px}
+.lab-grid{
+  display:grid;gap:1px;background:#050a05;padding:8px;
+  border:1px solid var(--green-dark);border-radius:6px;
+}
 .lab-cell{width:18px;height:18px;background:#000}
 .lab-cell.wall{background:rgba(0,143,57,.35)}
 .lab-cell.visible{background:rgba(23,77,36,.55)}

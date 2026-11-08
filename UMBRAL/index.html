@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>UMBRAL SYSTEM v1.0</title>
 <link rel="stylesheet" href="static/css/variables.css">
 <link rel="stylesheet" href="static/css/main.css">
@@ -14,61 +17,110 @@
 <link rel="stylesheet" href="static/css/games/codigo.css">
 <link rel="stylesheet" href="static/css/games/laberinto.css">
 <link rel="stylesheet" href="static/css/responsive.css">
-</head><body>
-<div class="monitor-frame"><div class="monitor-bezel">
-  <div class="monitor-screen" id="screen">
-    <div class="screen-content" id="screen-content">
-      <section id="view-boot" class="view">
-        <pre id="boot-log" class="boot-log"></pre>
-        <button id="boot-skip" class="btn btn-ghost boot-skip">[ SALTAR ]</button>
-        <div class="boot-hint">PRESS ENTER TO CONTINUE</div>
-      </section>
-      <section id="view-menu" class="view hidden">
-        <header class="menu-header">
-          <div class="menu-title"><span class="menu-title-mark">▚</span><h1>UMBRAL</h1><span class="menu-version">SYSTEM v1.0</span></div>
-          <div class="menu-status">
-            <div><span class="lbl">STATUS</span> <span id="sys-status" class="val">READY</span></div>
-            <div><span class="lbl">CLOCK</span> <span id="sys-clock" class="val">--:--:--</span></div>
-            <div><span class="lbl">MODULES</span> <span class="val">06</span></div>
-          </div>
-        </header>
-        <div class="menu-progress"><span class="lbl">PROGRESS</span>
-          <div class="progress-bar"><div id="global-progress" class="progress-fill"></div></div>
-          <span id="global-progress-text" class="val">0%</span>
+</head>
+<body>
+<div class="monitor-frame">
+  <div class="monitor-bezel">
+    <div class="monitor-screen" id="screen">
+
+      <!-- ============ DESKTOP ============ -->
+      <div class="desktop" id="desktop">
+        <div class="desktop-brand" aria-hidden="true">
+          <span class="brand-line">▚ UMBRAL</span>
+          <span class="brand-line small">SYSTEM v1.0</span>
+          <span class="brand-line smaller">U-86 PERSONAL COMPUTER</span>
         </div>
-        <main class="game-grid" id="game-grid"></main>
-        <footer class="menu-footer">
-          <button class="btn" data-nav="settings">[ CONFIGURACIÓN ]</button>
-          <a class="btn" href="pages/instructions.html" target="_blank">[ INSTRUCCIONES ]</a>
-          <a class="btn" href="pages/credits.html" target="_blank">[ CRÉDITOS ]</a>
-          <button class="btn" id="btn-power">[ APAGAR ]</button>
-        </footer>
-      </section>
-      <section id="view-game" class="view hidden">
-        <header class="game-header">
-          <button class="btn btn-ghost" id="game-back">[ ← MENÚ ]</button>
-          <h2 id="game-title">—</h2>
-          <div class="game-header-right"><span id="game-status" class="val">RUNNING</span></div>
-        </header>
-        <div id="game-root" class="game-root"></div>
-      </section>
-      <section id="view-settings" class="view hidden">
-        <header class="game-header">
-          <button class="btn btn-ghost" data-nav="menu">[ ← MENÚ ]</button>
-          <h2>CONFIGURACIÓN</h2><div></div>
-        </header>
-        <div class="settings-root" id="settings-root"></div>
-      </section>
+
+        <div class="desktop-icons" id="game-grid"></div>
+
+        <!-- Ventana juego -->
+        <div class="window hidden" id="window-game">
+          <div class="window-title">
+            <span class="window-title-icon">▣</span>
+            <span class="window-title-text" id="game-title">—</span>
+            <span class="window-title-btns">
+              <button class="window-btn" type="button" title="Minimizar">_</button>
+              <button class="window-btn" type="button" title="Maximizar">□</button>
+              <button class="window-btn window-btn-close" id="game-back" type="button" title="Cerrar">✕</button>
+            </span>
+          </div>
+          <div class="window-body" id="game-root"></div>
+          <div class="window-status">
+            <span id="game-status">RUNNING</span>
+            <span class="window-status-spacer"></span>
+            <span>MEM OK · 640K</span>
+          </div>
+        </div>
+
+        <!-- Ventana configuración -->
+        <div class="window hidden" id="window-settings">
+          <div class="window-title">
+            <span class="window-title-icon">⚙</span>
+            <span class="window-title-text">CONFIG.SYS</span>
+            <span class="window-title-btns">
+              <button class="window-btn" type="button" title="Minimizar">_</button>
+              <button class="window-btn" type="button" title="Maximizar">□</button>
+              <button class="window-btn window-btn-close" data-nav="menu" type="button" title="Cerrar">✕</button>
+            </span>
+          </div>
+          <div class="window-body" id="settings-root"></div>
+          <div class="window-status">
+            <span>READ-ONLY</span>
+            <span class="window-status-spacer"></span>
+            <span>CONFIG.SYS · 142 BYTES</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ TASKBAR (desktop) ============ -->
+      <div class="taskbar" id="taskbar">
+        <button class="start-btn" type="button" id="start-btn">
+          <span class="start-btn-logo">▚</span>
+          <span class="start-btn-text">INICIO</span>
+        </button>
+        <span class="taskbar-divider"></span>
+        <div class="taskbar-tasks" id="taskbar-tasks"></div>
+        <div class="taskbar-tray">
+          <span class="tray-label" id="sys-status">READY</span>
+          <span class="tray-progress">
+            <span class="tray-progress-bar"><span id="global-progress"></span></span>
+            <span class="tray-progress-val" id="global-progress-text">0%</span>
+          </span>
+          <span class="tray-clock" id="sys-clock">--:--</span>
+          <button class="tray-power" id="btn-power" type="button" title="Apagar">⏻</button>
+        </div>
+      </div>
+
+      <!-- ============ SOFTKEYS (móvil Nokia) ============ -->
+      <div class="mobile-softkeys" id="mobile-softkeys">
+        <button class="softkey softkey-left" type="button" data-nav="menu">
+          <span class="softkey-label">Menú</span>
+        </button>
+        <span class="softkey-center" id="mobile-center">UMBRAL</span>
+        <button class="softkey softkey-right" type="button" id="mobile-back">
+          <span class="softkey-label">Atrás</span>
+        </button>
+      </div>
+
+      <!-- ============ BOOT ============ -->
+      <div class="boot-overlay" id="boot-overlay">
+        <div class="boot-content">
+          <pre class="boot-log" id="boot-log"></pre>
+          <div class="boot-hint">PRESS ANY KEY TO CONTINUE <span class="cursor">_</span></div>
+        </div>
+        <button class="boot-skip" type="button" id="boot-skip">[ SALTAR ]</button>
+      </div>
+
+      <div class="crt-overlay scanlines"></div>
+      <div class="crt-overlay noise"></div>
+      <div class="crt-overlay vignette"></div>
     </div>
-    <div class="crt-overlay scanlines"></div>
-    <div class="crt-overlay noise"></div>
-    <div class="crt-overlay vignette"></div>
+  </div>
+  <div class="monitor-panel">
+    <span class="led" id="power-led"></span>
+    <span>POWER</span><span>·</span><span>UMBRAL SYSTEM</span><span>·</span><span>MODEL U-86</span>
   </div>
 </div>
-<div class="monitor-panel">
-  <span class="led" id="power-led"></span>
-  <span>POWER</span><span>·</span><span>UMBRAL SYSTEM</span><span>·</span><span>MODEL U-86</span>
-</div></div>
 <div id="screamer-layer" class="screamer-layer"></div>
 <div id="toast-layer" class="toast-layer"></div>
 <script src="static/js/storage.js"></script>
@@ -87,4 +139,5 @@
 <script src="static/js/games/laberinto.js"></script>
 <script src="static/js/navigation.js"></script>
 <script src="static/js/main.js"></script>
-</body></html>
+</body>
+</html>
