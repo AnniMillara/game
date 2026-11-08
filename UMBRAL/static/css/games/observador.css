@@ -1,0 +1,6 @@
+.obs-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.obs-scene{position:relative;width:100%;aspect-ratio:4/3;border:1px solid var(--green-dark);border-radius:4px;background:#030a03;overflow:hidden}
+.obs-item{position:absolute;border-radius:2px}
+.obs-scene.right{cursor:crosshair}
+.obs-item.found{outline:2px solid var(--green-bright);box-shadow:0 0 12px rgba(57,255,20,.8)}
+@media (max-width:700px){.obs-wrap{grid-template-columns:1fr}}

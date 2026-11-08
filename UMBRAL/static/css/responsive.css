@@ -1,0 +1,2 @@
+@media (max-width:900px){.game-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.menu-title h1{font-size:26px}.screen-content{padding:16px 14px}.monitor-screen,.screen-content{min-height:480px}}
+@media (max-width:600px){body{padding:8px}.monitor-frame{padding:10px}.monitor-bezel{padding:6px}.game-grid{grid-template-columns:1fr;gap:10px}.menu-header{flex-direction:column;align-items:flex-start}.menu-title h1{font-size:22px}.menu-footer .btn{width:100%}}

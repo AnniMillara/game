@@ -1,0 +1,5 @@
+.cod-root{max-width:620px;margin:0 auto}
+.cod-prompt{font-size:20px;letter-spacing:.15em;color:var(--green-bright);text-align:center;padding:20px;border:1px dashed var(--green-dark);border-radius:6px;margin-bottom:14px;min-height:90px;display:flex;align-items:center;justify-content:center;word-break:break-word}
+.cod-input-row{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
+.cod-input{background:transparent;border:1px solid var(--green-dark);color:var(--green-bright);padding:8px 12px;font-size:18px;letter-spacing:.2em;border-radius:4px;text-align:center;width:200px;font-family:inherit}
+.cod-input:focus{outline:none;border-color:var(--green-bright)}
